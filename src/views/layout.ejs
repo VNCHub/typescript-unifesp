@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title><%= title %></title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+
+  <body class="bg-light">
+
+    <!-- 🔹 NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container">
+        <a class="navbar-brand" href="/">Central de Tarefas - Unifesp</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navMain">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+            <li class="nav-item d-none" id="btn-manage-subjects">
+              <a class="nav-link" href="/subjects/admin">Gerenciar Matérias</a>
+            </li>
+
+            <li class="nav-item">
+              <button id="btn-open-login" class="nav-link text-white bg-transparent border-0">
+                <strong>Entrar</strong>
+              </button>
+            </li>
+
+            <li class="nav-item d-none" id="btn-logout">
+              <button class="nav-link text-white bg-transparent border-0">
+                <strong>Sair</strong>
+              </button>
+            </li>
+
+            <li class="nav-item">
+              <span id="auth-username" class="nav-link text-white"></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main class="container py-4">
+      <%- include(view) %>
+    </main>
+
+    <!-- 🔹 Modal -->
+    <%- include('partials/authModal') %>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- 🔹 MAIN: inicializa login + subjects + o que for -->
+    <script type="module" src="/assets/main.js"></script>
+
+  </body>
+</html>

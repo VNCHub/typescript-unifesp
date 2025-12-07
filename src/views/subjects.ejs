@@ -1,0 +1,102 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="mb-0"><%= title %></h1>
+  <button id="btn-new-subject" class="btn btn-success">+ Nova Matéria</button>
+</div>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <h6 class="card-title">Matérias cadastradas</h6>
+
+    <div class="table-responsive">
+      <table class="table table-sm table-striped align-middle">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Professor</th>
+            <th>Horário</th>
+            <th>Sala</th>
+            <th class="text-end">Ações</th>
+          </tr>
+        </thead>
+        <tbody id="subjects-table-body">
+          <!-- Conteúdo preenchido pelo frontend via JS -->
+          <tr>
+            <td colspan="6" class="text-center">
+              <div class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>
+              Carregando...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: create/edit -->
+<div class="modal fade" id="subjectModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <form id="subject-form" class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle">Nova matéria</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="input-id" />
+
+        <div class="mb-3">
+          <label for="input-nome" class="form-label">Nome</label>
+          <input id="input-nome" name="nome" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+          <label for="input-descricao" class="form-label">Descrição</label>
+          <textarea id="input-descricao" name="descricao" class="form-control" rows="3"></textarea>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="input-professorId" class="form-label">Professor</label>
+            <select id="input-professorId" name="professorId" class="form-control" required>
+              <option value="">Selecione...</option>
+            </select>
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <label for="input-horario" class="form-label">Horário</label>
+            <input id="input-horario" name="horario" class="form-control" />
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <label for="input-sala" class="form-label">Sala</label>
+            <input id="input-sala" name="sala" class="form-control" />
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Confirm delete modal -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmação</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Deseja realmente excluir <strong id="delete-item-name"></strong>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button id="btn-confirm-delete" type="button" class="btn btn-danger">Excluir</button>
+      </div>
+    </div>
+  </div>
+</div>

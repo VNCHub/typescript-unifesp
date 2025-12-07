@@ -1,0 +1,71 @@
+<div class="modal fade" id="authModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <h5 class="modal-title">Autenticação</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+
+        <!-- 🔹 Nav Tabs -->
+        <ul class="nav nav-tabs mb-3" id="authTabs">
+          <li class="nav-item">
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-login">Login</button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-register">Criar Conta</button>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+
+          <!-- 🔹 LOGIN -->
+          <div class="tab-pane fade show active" id="tab-login">
+            <form id="login-form">
+              <div class="mb-3">
+                <label class="form-label">E-mail</label>
+                <input name="email" class="form-control" type="email" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Senha</label>
+                <input name="senha" class="form-control" type="password" required>
+              </div>
+              <button class="btn btn-primary w-100">Entrar</button>
+            </form>
+          </div>
+
+          <!-- 🔹 REGISTER -->
+          <div class="tab-pane fade" id="tab-register">
+            <form id="register-form">
+              <div class="mb-3">
+                <label class="form-label">Nome</label>
+                <input name="nome" class="form-control" required>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">E-mail</label>
+                <input name="email" class="form-control" type="email" required>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Senha</label>
+                <input name="senha" class="form-control" type="password" required>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Data de Nascimento</label>
+                <input name="data_nascimento" class="form-control" type="date" required>
+              </div>
+
+              <button class="btn btn-success w-100">Criar Conta</button>
+            </form>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

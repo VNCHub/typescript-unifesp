@@ -1,0 +1,23 @@
+<div id="subject-list" class="row">
+  <% if (subjects && subjects.length) { %>
+    <% subjects.forEach(s => { %>
+      <div class="col-md-4 mb-3">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title"><%= s.nome %></h5>
+            <p class="card-text"><%= s.descricao || '' %></p>
+            <p class="small text-muted">Professor: <%= s.professor?.nome || '—' %></p>
+            <p class="text-muted small"><%= s.horario ? s.horario + (s.sala ? ' • Sala ' + s.sala : '') : (s.sala ? 'Sala ' + s.sala : '') %></p>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  <% } else { %>
+    <div class="col-12">
+      <div class="alert alert-info">Nenhuma matéria cadastrada ainda.</div>
+    </div>
+  <% } %>
+</div>
+
+<!-- Modal: Detalhes da Matéria -->
+<%- include("partials/subjectDetailsModal") %>

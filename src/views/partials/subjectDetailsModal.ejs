@@ -1,0 +1,79 @@
+<div class="modal fade" id="subjectDetailsModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Matéria</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="card shadow-sm">
+          <div class="card-body pb-2">
+
+            <!-- Nome (destacado) -->
+            <h4 id="detail-nome" class="fw-bold mb-3 text-primary">—</h4>
+
+            <div class="row mb-3">
+
+              <!-- Professor -->
+              <div class="col-md-6 mb-2">
+                <strong>Professor:</strong>
+                <div id="detail-professor" class="text-muted">—</div>
+              </div>
+
+              <!-- Horário -->
+              <div class="col-md-3 mb-2">
+                <strong>Horário:</strong>
+                <div id="detail-horario" class="text-muted">—</div>
+              </div>
+
+              <!-- Sala -->
+              <div class="col-md-3 mb-2">
+                <strong>Sala:</strong>
+                <div id="detail-sala" class="text-muted">—</div>
+              </div>
+
+            </div>
+
+            <!-- Descrição (linha inteira) -->
+            <div class="mb-1">
+              <strong>Descrição:</strong>
+              <div id="detail-descricao" class="text-muted">—</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Notas de Aula -->
+        <div class="card shadow-sm mt-4">
+          <div class="card-body d-flex flex-column">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5 class="card-title mb-0">Notas de Aula</h5>
+
+              <button id="btn-add-note" class="btn btn-primary btn-sm">
+                + Adicionar Nota
+              </button>
+            </div>
+
+            <ul id="notes-list" class="list-group" style="min-height: 150px;">
+              <li class="list-group-item text-center text-muted" id="notes-loading">
+                <div class="spinner-border spinner-border-sm me-2"></div>
+                Carregando notas...
+              </li>
+            </ul>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
