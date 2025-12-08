@@ -1,9 +1,7 @@
 import { Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '../db';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-
-const prisma = new PrismaClient();
 
 class LoginController {
   async login(req: Request, res: Response) {
@@ -53,7 +51,7 @@ async registrar(req: Request, res: Response) {
       nome,
       email,
       senha: hash,
-      data_nascimento: new Date(data_nascimento),
+      dataNascimento: new Date(data_nascimento),
       tipo: 'ALUNO'
     },
   });

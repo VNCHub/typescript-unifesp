@@ -1,16 +1,15 @@
 // src/db.ts
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from './client/prisma/client';
+import { PrismaLibSql } from '@prisma/adapter-libsql';
 
-declare global {
-  namespace NodeJS {
-    interface Global {
-      __prisma?: PrismaClient;
-    }
-  }
-}
+const adapter = new PrismaLibSql({
+  url: 'file:./prisma/dev.db'
+});
 
-export const prisma: PrismaClient = global.__prisma ?? new PrismaClient();
+const options: Prisma.PrismaClientOptions = {
+  adapter,
+  accelerateUrl: undefined,
+  log: ['error', 'warn'],
+};
 
-if (process.env.NODE_ENV !== 'production') {
-  global.__prisma = prisma;
-}
+export const prisma = new PrismaClient(options);
