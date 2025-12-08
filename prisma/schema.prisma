@@ -1,32 +1,31 @@
-// Configuração do banco
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../src/client/prisma"
 }
+
 
 datasource db {
   provider = "sqlite"
 }
 
-// Usuário (base: alunos e admin)
 model Usuario {
   id Int @id @default(autoincrement())
   nome String
   email String @unique
   senha String
-  data_nascimento DateTime?
+  dataNascimento DateTime?
   tipo TipoUsuario @default(ALUNO)
-  data_cadastro DateTime @default(now())
+  dataCadastro DateTime @default(now())
 
   aluno Aluno?
 
   @@map("usuarios")
 }
 
-// Aluno
 model Aluno {
   id Int @id @default(autoincrement())
   usuarioId Int @unique
-  data_matricula DateTime @default(now())
+  dataMatricula DateTime @default(now())
 
   usuario Usuario @relation(fields: [usuarioId], references: [id])
   materias AlunoMateria[]
@@ -34,7 +33,6 @@ model Aluno {
   @@map("alunos")
 }
 
-// Professor (sem usuário vinculado)
 model Professor {
   id Int @id @default(autoincrement())
   nome String
@@ -45,7 +43,6 @@ model Professor {
   @@map("professores")
 }
 
-// Matéria
 model Materia {
   id Int @id @default(autoincrement())
   nome String
@@ -56,18 +53,17 @@ model Materia {
 
   professor Professor @relation(fields: [professorId], references: [id])
   alunos AlunoMateria[]
-  tarefas Tarefa[]
 
   @@map("materias")
 }
 
-// Relação Aluno x Matéria
 model AlunoMateria {
   id Int @id @default(autoincrement())
   alunoId Int
   materiaId Int
   nota Float?
   frequencia Float?
+  notasAula NotaDeAula[]
 
   aluno Aluno @relation(fields: [alunoId], references: [id])
   materia Materia @relation(fields: [materiaId], references: [id])
@@ -76,21 +72,18 @@ model AlunoMateria {
   @@map("alunos_materias")
 }
 
-// Tarefa
-model Tarefa {
+model NotaDeAula {
   id Int @id @default(autoincrement())
-  materiaId Int
+  alunoMatriculaId Int
   titulo String
-  descricao String?
-  data_entrega DateTime?
-  status String @default("Pendente")
+  data DateTime @default(now())
+  markdown String
 
-  materia Materia @relation(fields: [materiaId], references: [id])
+  alunoMateria AlunoMateria @relation(fields: [alunoMatriculaId], references: [id])
 
-  @@map("tarefas")
+  @@map("notas_aula")
 }
 
-// Enum tipo de usuário
 enum TipoUsuario {
   ALUNO
   ADMIN
