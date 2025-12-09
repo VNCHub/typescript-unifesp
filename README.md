@@ -24,7 +24,6 @@ Projeto base de Agenda de Alunos - uma plataforma que permite centralizar funcio
 - **Bootstrap** - Framework CSS via CDN
 - **SQLite** - Banco de dados relacional
 - **esbuild** - Bundler para compilação do código frontend
-- **Docker** - Containerização da aplicação
 
 ---
 

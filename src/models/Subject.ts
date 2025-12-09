@@ -1,4 +1,6 @@
 // src/models/Subject.ts
+import { ITeacher } from './Teacher';
+
 export interface ISubject {
   id?: number;
   nome: string;
@@ -6,6 +8,7 @@ export interface ISubject {
   professorId: number;
   horario?: string | null;
   sala?: string | null;
+  professor?: ITeacher | null; // Relacionamento com Professor
 }
 
 export class Subject {
@@ -15,12 +18,11 @@ export class Subject {
   public professorId!: number;
   public horario?: string | null;
   public sala?: string | null;
+  public professor?: ITeacher| null; // Relacionamento com Professor
 
   constructor(props: ISubject) {
     if (!props.nome) throw new Error("Nome da matéria é obrigatório");
     if (!props.professorId) throw new Error("Professor é obrigatório");
-
     Object.assign(this, props);
   }
 }
-
