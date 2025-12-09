@@ -1,22 +1,22 @@
 export interface IEnrollment {
   id?: number;
-  aluno_id: number;
-  materia_id: number;
+  alunoId: number;
+  materiaId: number;
   nota?: number;
   frequencia?: number;
 }
 
 export class Enrollment {
   public readonly id?: number;
-  public aluno_id!: number;
-  public materia_id!: number;
+  public alunoId!: number;
+  public materiaId!: number;
   public nota?: number;
   public frequencia?: number;
 
   constructor(props: IEnrollment) {
-    if (!props.aluno_id)
+    if (!props.alunoId)
       throw new Error("Aluno deve ser informado para matrícula");
-    if (!props.materia_id)
+    if (!props.materiaId)
       throw new Error("Matéria deve ser informada para matrícula");
 
     Object.assign(this, props);

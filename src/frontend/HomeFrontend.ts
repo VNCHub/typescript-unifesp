@@ -1,32 +1,88 @@
 declare const bootstrap: any;
 
-type Professor = { id: number; nome: string };
-type Subject = {
-  id?: number;
-  nome: string;
-  descricao?: string | null;
-  professorId: number;
-  professor?: Professor | null;
-  horario?: string | null;
-  sala?: string | null;
-};
+import { IUser } from '../models/User';
+import { IEnrollment } from '../models/Enrollment';
+import { ISubject } from '../models/Subject';
 
 export class HomeFrontend {
-  private API = "/api/subjects";
+  private API_SUBJECTS = "/api/subjects";
+  private API_ENROLLMENT = "/api/enrollment";
+  private API_ME = "/api/me";
+  
+  private currentUser: IUser | null = null;
+  private userEnrollments: IEnrollment[] = [];
 
-  init() {
+  async init() {
+    await this.loadCurrentUser();
     this.loadAndRender();
-    document.addEventListener("click", (e) => {
+    
+    document.addEventListener("click", async (e) => {
       const target = e.target as HTMLElement;
+      
       if (target?.dataset?.edit?.endsWith("-details")) {
         const id = Number(target.dataset.edit.replace("-details", ""));
-        this.openDetailsModal(id);
+        await this.openDetailsModal(id);
+      }
+      
+      if (target?.dataset?.enroll) {
+        const subjectId = Number(target.dataset.enroll);
+        await this.handleEnroll(subjectId);
+      }
+      
+      if (target?.dataset?.unenroll) {
+        const enrollmentId = Number(target.dataset.unenroll);
+        await this.handleUnenroll(enrollmentId);
       }
     });
   }
 
+  private async loadCurrentUser() {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        this.currentUser = null;
+        return;
+      }
+
+      const res = await fetch(this.API_ME, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      if (!res.ok) {
+        // Token inválido ou expirado
+        localStorage.removeItem('token');
+        this.currentUser = null;
+        return;
+      }
+      
+      this.currentUser = await res.json();
+      if (this.currentUser?.id) {
+        await this.loadUserEnrollments();
+      }
+    } catch (err) {
+      console.error("Erro ao carregar usuário:", err);
+      this.currentUser = null;
+    }
+  }
+
+  private async loadUserEnrollments() {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${this.API_ENROLLMENT}/user/${this.currentUser!.id}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      console.log(res.json);
+      
+      if (res.ok) {
+        this.userEnrollments = await res.json();
+      }
+    } catch (err) {
+      console.error("Erro ao carregar matrículas:", err);
+    }
+  }
+
   private async openDetailsModal(id: number) {
-    const res = await fetch(`${this.API}/${id}`);
+    const res = await fetch(`${this.API_SUBJECTS}/${id}`);
     const subject = await res.json();
 
     (this.$("#detail-nome") as HTMLElement).textContent = subject.nome;
@@ -39,6 +95,72 @@ export class HomeFrontend {
 
     const modal = new bootstrap.Modal(this.$("#subjectDetailsModal")!);
     modal.show();
+  }
+
+  private async handleEnroll(subjectId: number) {
+    try {
+      const token = localStorage.getItem('token');
+      
+      if (!token || !this.currentUser) {
+        alert("Você precisa fazer login para se matricular");
+        return;
+      }
+
+      const alunoId = this.currentUser?.aluno?.id;
+
+      if (!alunoId) {
+        alert("Erro: Usuário não possui registro de aluno");
+        return;
+      }
+
+      const res = await fetch(this.API_ENROLLMENT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          alunoId: alunoId,
+          materiaId: subjectId
+        })
+      });
+
+      if (res.ok) {
+        await this.loadUserEnrollments();
+        await this.loadAndRender();
+        alert("Matrícula realizada com sucesso!");
+      } else {
+        const error = await res.json();
+        alert(`Erro: ${error.error}`);
+      }
+    } catch (err) {
+      console.error("Erro ao matricular:", err);
+      alert("Erro ao realizar matrícula");
+    }
+  }
+
+  private async handleUnenroll(enrollmentId: number) {
+    if (!confirm("Deseja realmente se desmatricular?")) return;
+
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${this.API_ENROLLMENT}/${enrollmentId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (res.ok) {
+        await this.loadUserEnrollments();
+        await this.loadAndRender();
+        alert("Desmatriculado com sucesso!");
+      } else {
+        const error = await res.json();
+        alert(`Erro: ${error.error}`);
+      }
+    } catch (err) {
+      console.error("Erro ao desmatricular:", err);
+      alert("Erro ao realizar desmatrícula");
+    }
   }
 
   private async loadNotes(subjectId: number) {
@@ -78,8 +200,6 @@ export class HomeFrontend {
     }
   }
 
-
-
   private $(sel: string): HTMLElement | null {
     return document.querySelector(sel);
   }
@@ -90,13 +210,13 @@ export class HomeFrontend {
     );
   }
 
-  private async fetchSubjects(): Promise<Subject[]> {
-    const res = await fetch(this.API);
+  private async fetchSubjects(): Promise<ISubject[]> {
+    const res = await fetch(this.API_SUBJECTS);
     if (!res.ok) throw new Error("Erro ao carregar matérias");
     return res.json();
   }
 
-  private renderList(items: Subject[]) {
+  private renderList(items: ISubject[]) {
     const container = this.$("#subject-list")!;
     container.innerHTML = "";
 
@@ -108,29 +228,49 @@ export class HomeFrontend {
       return;
     }
 
-    for (const s of items) {
+    for (const subject of items) {
+      const enrollment = this.userEnrollments.find(enrollment => enrollment.materiaId === subject.id);
+      const enrollButton = this.getEnrollButton(subject.id!, enrollment);
+
       const col = document.createElement("div");
       col.className = "col-md-4 mb-3";
       col.innerHTML = `
         <div class="card h-100">
           <div class="card-body">
-            <h5 class="card-title">${this.escapeHtml(s.nome)}</h5>
-            <p class="card-text">${this.escapeHtml(s.descricao || "")}</p>
-            <p class="small text-muted">Professor: ${this.escapeHtml(s.professor?.nome ?? "—")}</p>
+            <h5 class="card-title">${this.escapeHtml(subject.nome)}</h5>
+            <p class="card-text">${this.escapeHtml(subject.descricao || "")}</p>
+            <p class="small text-muted">Professor: ${this.escapeHtml(subject.professor?.nome ?? "—")}</p>
             <p class="text-muted small">
               ${this.escapeHtml(
-                s.horario
-                  ? s.horario + (s.sala ? " • Sala " + s.sala : "")
-                  : s.sala
-                  ? "Sala " + s.sala
+                subject.horario
+                  ? subject.horario + (subject.sala ? " • Sala " + subject.sala : "")
+                  : subject.sala
+                  ? "Sala " + subject.sala
                   : ""
               )}
             </p>
-            <button class="btn btn-sm btn-outline-primary me-2" data-edit="${s.id}-details">Detalhes</button>
+            ${enrollment ? `<button class="btn btn-sm btn-outline-primary me-2" data-edit="${subject.id}-details">Detalhes</button>` : ""}
+            ${enrollButton}
           </div>
         </div>`;
       container.appendChild(col);
     }
+  }
+
+  private getEnrollButton(subjectId: number, enrollment?: IEnrollment): string {
+    if (!this.currentUser) {
+      return `<button class="btn btn-sm btn-secondary" disabled>Login para matricular</button>`;
+    }
+
+    if (enrollment) {
+      return `<button class="btn btn-sm btn-danger" data-unenroll="${enrollment.id}">
+        <i class="bi bi-x-circle"></i> Desmatricular
+      </button>`;
+    }
+
+    return `<button class="btn btn-sm btn-success" data-enroll="${subjectId}">
+      <i class="bi bi-check-circle"></i> Matricular
+    </button>`;
   }
 
   private async loadAndRender() {
