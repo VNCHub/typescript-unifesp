@@ -1,0 +1,26 @@
+<div class="modal fade" id="classNoteModal" tabindex="-1">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold" id="classNoteModalTitle">Nova Nota</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body pt-0">
+        <!-- Campo título -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Título</label>
+          <input id="note-title-input" class="form-control" placeholder="Digite o título da nota">
+        </div>
+        
+        <div class="mb-1">
+          <label class="form-label fw-semibold">Conteúdo da Aula (Markdown)</label>
+        </div>
+        <textarea id="editor-textarea"></textarea>
+      </div>
+      <div class="modal-footer border-0">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn btn-primary" id="save-classnote-btn">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>

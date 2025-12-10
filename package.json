@@ -17,8 +17,10 @@
     "@libsql/client": "^0.15.15",
     "@prisma/adapter-libsql": "^7.1.0",
     "@prisma/client": "^7.1.0",
+    "@toast-ui/editor": "^3.2.2",
     "bcryptjs": "^3.0.3",
     "dotenv": "^17.2.3",
+    "easymde": "^2.20.0",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2"

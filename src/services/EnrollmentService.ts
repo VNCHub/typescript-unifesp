@@ -3,16 +3,19 @@ import { Enrollment } from '../models/Enrollment';
 import { EnrollmentRepository } from '../repositories/EnrollmentRepository';
 import { StudentRepository } from '../repositories/StudentRepository';
 import { SubjectRepository } from '../repositories/SubjectRepository';
+import { ClassNoteRepository } from '../repositories/ClassNoteRepository';
 
 export class EnrollmentService {
   private enrollmentRepo: EnrollmentRepository;
   private studentRepo: StudentRepository;
   private subjectRepo: SubjectRepository;
+  private classNoteRepo: ClassNoteRepository;
 
   constructor() {
     this.enrollmentRepo = new EnrollmentRepository();
     this.studentRepo = new StudentRepository();
     this.subjectRepo = new SubjectRepository();
+    this.classNoteRepo = new ClassNoteRepository();
   }
 
   async getByUserId(userId: number) {
@@ -53,6 +56,16 @@ export class EnrollmentService {
       throw err;
     }
 
+    // Buscar notas associadas à matrícula
+    const notes = await this.classNoteRepo.findAllByEnrollmentId(id);
+
+    // Apagar todas as notas associadas
+    for (const note of notes) {
+      await this.classNoteRepo.delete(note.id!);
+    }
+
+    // Apagar a matrícula após remover as notas
     return this.enrollmentRepo.delete(id);
   }
+
 }

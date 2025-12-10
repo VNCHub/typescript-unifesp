@@ -41,7 +41,7 @@ router.post('/api/enrollment', EnrollmentController.enroll);
 router.delete('/api/enrollment/:id', EnrollmentController.unenroll);
 
 /* API REST de ClassNotes (Notas de Aula) */
-router.get('/api/classnotes', ClassNoteController.getAll);
+router.get('/api/classnotes/enrollment/:enrollmentId', ClassNoteController.getAllByEnrollmentId);
 router.get('/api/classnotes/:id', ClassNoteController.getById);
 router.post('/api/classnotes', ClassNoteController.create);
 router.put('/api/classnotes/:id', ClassNoteController.update);

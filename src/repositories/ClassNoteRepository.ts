@@ -68,4 +68,19 @@ export class ClassNoteRepository {
   async delete(id: number) {
     return prisma.notaDeAula.delete({ where: { id } });
   }
+
+  async findAllByEnrollmentId(enrollmentId: number) {
+    return prisma.notaDeAula.findMany({
+      where: { alunoMatriculaId: enrollmentId },
+      include: { 
+        alunoMateria: {
+          include: {
+            aluno: { include: { usuario: true } },
+            materia: { include: { professor: true } }
+          }
+        }
+      },
+      orderBy: { data: 'desc' },
+    });
+  }
 }
