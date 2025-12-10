@@ -3,3 +3,7 @@ node_modules
 
 src/client/prisma
 prisma/dev.db
+public/assets/**/*.js
+public/assets/**/*.css
+public/assets/**/*.js.map
+public/assets/**/*.css.map
