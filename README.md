@@ -157,4 +157,4 @@ Este projeto é parte de um trabalho acadêmico.
 ## 👤 Autor
 
 **Vinicius Carrocine Leite**  
-Data: Dezembro/2024
+Data: Dezembro/2025
