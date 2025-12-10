@@ -16,6 +16,10 @@ export class ClassNoteService {
     return this.classNoteRepo.findAll();
   }
 
+  async getAllByEnrollmentId(enrollmentId: number) {
+    return this.classNoteRepo.findAllByEnrollmentId(enrollmentId);
+  }
+
   async getById(id: number) {
     return this.classNoteRepo.findById(id);
   }

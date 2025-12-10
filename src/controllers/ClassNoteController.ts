@@ -11,11 +11,22 @@ export class ClassNoteController {
     this.create = this.create.bind(this);
     this.update = this.update.bind(this);
     this.delete = this.delete.bind(this);
+    this.getAllByEnrollmentId = this.getAllByEnrollmentId.bind(this);
   }
 
   async getAll(_req: Request, res: Response) {
     try {
       const notes = await this.service.getAll();
+      return res.json(notes);
+    } catch (err: any) {
+      return res.status(400).json({ error: err.message });
+    }
+  }
+
+  async getAllByEnrollmentId(req: Request, res: Response) {
+    try {
+      const enrollmentId = Number(req.params.enrollmentId);
+      const notes = await this.service.getAllByEnrollmentId(enrollmentId);
       return res.json(notes);
     } catch (err: any) {
       return res.status(400).json({ error: err.message });

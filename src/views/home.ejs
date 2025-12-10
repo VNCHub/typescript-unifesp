@@ -1,23 +1,136 @@
-<div id="subject-list" class="row">
-  <% if (subjects && subjects.length) { %>
-    <% subjects.forEach(s => { %>
-      <div class="col-md-4 mb-3">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title"><%= s.nome %></h5>
-            <p class="card-text"><%= s.descricao || '' %></p>
-            <p class="small text-muted">Professor: <%= s.professor?.nome || '—' %></p>
-            <p class="text-muted small"><%= s.horario ? s.horario + (s.sala ? ' • Sala ' + s.sala : '') : (s.sala ? 'Sala ' + s.sala : '') %></p>
+<!-- Seção: Como Usar as Funcionalidades -->
+<section class="mb-5">
+  <div class="d-flex align-items-center mb-4">
+    <i class="bi bi-lightbulb-fill text-warning fs-1 me-3"></i>
+    <h2 class="mb-0 fw-bold">Como Usar as Funcionalidades</h2>
+  </div>
+
+  <div class="row g-4">
+
+    <!-- Passo 1 -->
+    <div class="col-md-6">
+      <div class="p-3 border rounded shadow-sm h-100 bg-light hover-card">
+        <div class="d-flex align-items-center mb-2">
+          <i class="bi bi-1-circle-fill text-primary fs-3 me-2"></i>
+          <h5 class="mb-0">(1) Visualizar Detalhes da Matéria</h5>
+        </div>
+        <p class="mb-0 small">
+          Clique em <strong>"Ver Detalhes"</strong> para acessar as informações completas da matéria,
+          horários, professor e suas notas.
+        </p>
+      </div>
+    </div>
+
+    <!-- Passo 2 -->
+    <div class="col-md-6">
+      <div class="p-3 border rounded shadow-sm h-100 bg-light hover-card">
+        <div class="d-flex align-items-center mb-2">
+          <i class="bi bi-2-circle-fill text-success fs-3 me-2"></i>
+          <h5 class="mb-0">(2) Matricular-se em Matérias</h5>
+        </div>
+        <p class="mb-0 small">
+          Clique em <strong>"Matricular"</strong> para entrar na matéria. Você pode se desmatricular a qualquer momento.
+        </p>
+      </div>
+    </div>
+
+    <!-- Passo 3 -->
+    <div class="col-md-6">
+      <div class="p-3 border rounded shadow-sm h-100 bg-light hover-card">
+        <div class="d-flex align-items-center mb-2">
+          <i class="bi bi-3-circle-fill text-warning fs-3 me-2"></i>
+          <h5 class="mb-0">(3) Criar Notas de Aula</h5>
+        </div>
+        <p class="mb-0 small">
+          Após matriculado, abra os detalhes da matéria e clique em <strong>"+ Nova Nota"</strong>
+          para criar anotações usando Markdown.
+        </p>
+      </div>
+    </div>
+
+    <!-- Passo 4 -->
+    <div class="col-md-6">
+      <div class="p-3 border rounded shadow-sm h-100 bg-light hover-card">
+        <div class="d-flex align-items-center mb-2">
+          <i class="bi bi-4-circle-fill text-danger fs-3 me-2"></i>
+          <h5 class="mb-0">(4) Gerenciar suas Notas</h5>
+        </div>
+        <p class="mb-0 small">
+          Use <strong>"Visualizar"</strong> para ler suas notas, <strong>"Editar"</strong> para atualizar
+          e <strong>"Excluir"</strong> para remover quando necessário.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .hover-card {
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+
+  .hover-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);
+    background: #fff !important;
+  }
+</style>
+
+
+<!-- Seção: Matérias Este Semestre -->
+<section>
+  <div class="d-flex align-items-center mb-4">
+    <i class="bi bi-grid text-primary fs-2 me-3"></i>
+    <h2 class="mb-0">Matérias Este Semestre</h2>
+  </div>
+  
+  <div id="subject-list" class="row">
+    <% if (subjects && subjects.length) { %>
+      <% subjects.forEach(s => { %>
+        <div class="col-md-4 mb-3">
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="card-title mb-0"><%= s.nome %></h5>
+                <span class="enrolled-badge d-none" data-subject-id="<%= s.id %>">
+                  <i class="bi bi-check-circle"></i> Matriculado
+                </span>
+              </div>
+              <p class="card-text"><%= s.descricao || '' %></p>
+              <p class="small text-muted">Professor: <%= s.professor?.nome || '—' %></p>
+              <p class="text-muted small"><%= s.horario ? s.horario + (s.sala ? ' • Sala ' + s.sala : '') : (s.sala ? 'Sala ' + s.sala : '') %></p>
+              
+              <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-outline-primary flex-grow-1" data-edit="<%= s.id %>-details">
+                  Ver Detalhes
+                </button>
+                
+                <button class="btn btn-sm btn-success enroll-btn" 
+                        data-enroll="<%= s.id %>" 
+                        data-subject-id="<%= s.id %>">
+                  Matricular
+                </button>
+                
+                <button class="btn btn-sm btn-danger unenroll-btn ds-none" 
+                        data-unenroll="<%= s.id %>"
+                        data-subject-id="<%= s.id %>">
+                  Desmatricular
+                </button>
+              </div>
+            </div>
           </div>
         </div>
+      <% }) %>
+    <% } else { %>
+      <div class="col-12">
+        <div class="alert alert-info">Nenhuma matéria cadastrada ainda.</div>
       </div>
-    <% }) %>
-  <% } else { %>
-    <div class="col-12">
-      <div class="alert alert-info">Nenhuma matéria cadastrada ainda.</div>
-    </div>
-  <% } %>
-</div>
+    <% } %>
+  </div>
+</section>
 
 <!-- Modal: Detalhes da Matéria -->
 <%- include("partials/subjectDetailsModal") %>
+<%- include("partials/classNoteModal") %>
+<%- include("partials/viewNoteModal") %>
